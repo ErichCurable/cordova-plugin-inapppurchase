@@ -374,7 +374,11 @@ typedef void (^RMStoreSuccessBlock)();
                 [self didPurchaseTransaction:transaction queue:queue];
                 break;
             case SKPaymentTransactionStateFailed:
-                [self didFailTransaction:transaction queue:queue error:transaction.error];
+                 if (transaction.error.code == SKErrorPaymentCancelled) {
+                    NSLog(@"user cancelled");
+                } else {
+                    [self didFailTransaction:transaction queue:queue error:transaction.error];
+                }
                 break;
             case SKPaymentTransactionStateRestored:
                 [self didRestoreTransaction:transaction queue:queue];
